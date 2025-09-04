@@ -75,7 +75,6 @@
       <div class="brand"><strong>Python alapok — 10. osztály</strong></div>
       <div>
         <h1>45 kérdéses vegyes kvíz</h1>
-        <p class="lead">Feleletválasztó, behelyettesítéses és programíró feladatok — egyszerű, tanárbarát gyűjtéssel.</p>
       </div>
     </header>
 
@@ -329,7 +328,6 @@
             <!-- II. Behelyettesítés / Kódkiegészítés (15) -->
             <section id="fill-section" class="hidden">
               <h2>II. Behelyettesítés / Kódkiegészítés <span class="required-star">*</span></h2>
-              <p class="question-meta">Ezeket a válaszokat a tanár kézzel is ellenőrizheti — a rendszer csak összegyűjti a beírt válaszokat.</p>
 
               <!-- 21..35 inputs -->
               <label class="question">21. Egészítsd ki: <code>for i in range(1, ___):\n    print(i ** 2)</code></label>
@@ -358,7 +356,6 @@
             <!-- III. Rövid programíró feladatok (10) -->
             <section id="code-section" class="hidden">
               <h2>III. Rövid programíró feladatok <span class="required-star">*</span></h2>
-              <p class="question-meta">Ide írhatják a diákok a megoldásokat — ezek automatikusan nem lesznek javítva, a tanár ellenőrzi őket.</p>
 
               <!-- 36..45 textareas -->
               <label class="question">36. Bekér egy számot, és kiírja, hogy páros vagy páratlan:</label><textarea name="q36" placeholder="Pl. if szá%2==0: ..."></textarea>
@@ -378,38 +375,12 @@
               </div>
             </section>
 
-            <div class="actions">
-              <button type="button" id="gradeBtn">Ellenőrzés (feleletválasztók javítása)</button>
-              <button type="button" id="downloadBtn" class="ghost">Válaszok letöltése (JSON)</button>
-              <button type="reset" class="ghost">Űrlap törlése</button>
-            </div>
-
             <div id="resultArea"></div>
           </form>
           <!-- QUIZ FORM END -->
         </div>
-
-        <aside class="side">
-          <h3>Mit csinál ez az oldal?</h3>
-          <ul>
-            <li>A 20 feleletválasztós kérdést azonnal javítja a rendszer.</li>
-            <li>A 15 behelyettesítéses és 10 programíró feladatot a tanár kézzel nézi át.</li>
-            <li>A válaszokat JSON-ként le lehet tölteni, és a tanár importálhatja vagy megnézheti őket a beépített adatbázisból (localStorage).</li>
-          </ul>
-
-          <details><summary>Rövid telepítési útmutató (ingyenes URL-hez)</summary>
-            <ol>
-              <li>Hozz létre egy új GitHub repository-t (pl. <code>python-quiz</code>).</li>
-              <li>Helyezd el ezt az <code>index.html</code> fájlt a repo gyökerébe és push-old fel.</li>
-              <li>GitHub Pages: Settings &gt; Pages &gt; Branch: main &gt; / (root) &gt; Save. A site a <code>https://&lt;felhasználónév&gt;.github.io/&lt;repo&gt;</code> címen lesz elérhető.</li>
-            </ol>
-          </details>
-
-          <p class="question-meta" style="margin-top:10px">Használat: Diák kitölt — mentés a böngészőben (localStorage) — tanár belép (Tóth Alex GVM) és megnyitja a javító felületet.</p>
-        </aside>
       </div>
 
-      <footer><small>Jó kódolást — és ne feledd: a bugok a tanulás barátai. 😉</small></footer>
     </main>
   </div>
 
