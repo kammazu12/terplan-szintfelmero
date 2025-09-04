@@ -566,8 +566,8 @@ print(x)</pre></code>
 
     document.getElementById('backToMC').addEventListener('click',()=>{ fillSection.classList.add('hidden'); mcSection.classList.remove('hidden'); window.scrollTo(0,0); });
     document.getElementById('toCode').addEventListener('click',()=>{
-      for(let i=21;i<=35;i++){ const el = document.querySelector('[name="q'+i+'"]'); if(!el || !el.value.trim()){ alert('Kérlek válaszolj minden behelyettesítéses kérdésre (21-35).'); return; } }
-      for(let i=21;i<=35;i++) window.answers['q'+i] = document.querySelector('[name="q'+i+'"]').value.trim();
+      for(let i=21;i<=30;i++){ const el = document.querySelector('[name="q'+i+'"]'); if(!el || !el.value.trim()){ alert('Kérlek válaszolj minden behelyettesítéses kérdésre (21-35).'); return; } }
+      for(let i=21;i<=30;i++) window.answers['q'+i] = document.querySelector('[name="q'+i+'"]').value.trim();
       fillSection.classList.add('hidden'); codeSection.classList.remove('hidden'); window.scrollTo(0,0);
     });
     document.getElementById('backToFill').addEventListener('click',()=>{ codeSection.classList.add('hidden'); fillSection.classList.remove('hidden'); window.scrollTo(0,0); });
