@@ -63,9 +63,10 @@
     .small{font-size:12px;color:var(--muted)}
     .teacher-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
     .badge{background:rgba(125,211,252,0.06);color:var(--accent);padding:4px 8px;border-radius:8px;font-weight:700}
-    .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, \"Roboto Mono\", monospace;font-size:13px}
+    .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;font-size:13px}
     .flex{display:flex;gap:8px;align-items:center}
     .right{text-align:right}
+    .small-btn{padding:6px 8px;border-radius:8px;font-size:13px}
   </style>
 </head>
 <body>
@@ -91,13 +92,14 @@
           <!-- TEACHER SECTION (hidden until teacher name entered) -->
           <section id="teacher-section" class="hidden">
             <h2>Tanári felület — Javító</h2>
-            <p class="small">Ha a diákok JSON fájljait kapod, töltsd fel ide őket. A rendszer automatikusan kiértékeli az 1–20. feleletválasztós kérdéseket.</p>
+            <p class="small">A beérkezett válaszok (localStorage) listája — automatikus kiértékelés 1–20-ig. Feltölthetsz diák JSON-okat is.</p>
 
             <div class="teacher-controls" style="margin-top:8px">
               <input type="file" id="fileInput" accept=".json,application/json" multiple />
-              <button id="processFilesBtn">Feldolgoz</button>
-              <button id="exportAllCsv" class="ghost">Export CSV</button>
-              <button id="exportAllJson" class="ghost">Export JSON</button>
+              <button id="processFilesBtn" class="small-btn">Feldolgoz</button>
+              <button id="refreshDbBtn" class="ghost small-btn">Frissít adatbázisból</button>
+              <button id="exportAllCsv" class="ghost small-btn">Export CSV</button>
+              <button id="exportAllJson" class="ghost small-btn">Export JSON</button>
               <div class="badge" id="subCount">0 beküldés</div>
             </div>
 
@@ -140,7 +142,7 @@
             <section id="mc-section" class="hidden">
               <h2>I. Feleletválasztós kérdések <span class="required-star">*</span></h2>
 
-              <!-- (questions 1..20 as in previous file) -->
+              <!-- (questions 1..20) -->
               <!-- 1 -->
               <label class="question">1. Melyik helyes változónév Pythonban?</label>
               <div class="choices">
@@ -329,7 +331,7 @@
               <h2>II. Behelyettesítés / Kódkiegészítés <span class="required-star">*</span></h2>
               <p class="question-meta">Ezeket a válaszokat a tanár kézzel is ellenőrizheti — a rendszer csak összegyűjti a beírt válaszokat.</p>
 
-              <!-- 21..35 inputs (same as before) -->
+              <!-- 21..35 inputs -->
               <label class="question">21. Egészítsd ki: <code>for i in range(1, ___):\n    print(i ** 2)</code></label>
               <input type="text" name="q21" placeholder="Pl.: 6">
               <label class="question">22. Hiányzó kulcsszó: ...</label><input type="text" name="q22" placeholder="Pl.: elif">
@@ -358,17 +360,17 @@
               <h2>III. Rövid programíró feladatok <span class="required-star">*</span></h2>
               <p class="question-meta">Ide írhatják a diákok a megoldásokat — ezek automatikusan nem lesznek javítva, a tanár ellenőrzi őket.</p>
 
-              <!-- 36..45 textareas (same as before) -->
-              <label class="question">36. ...</label><textarea name="q36" placeholder="Pl. if szá%2==0: ..."></textarea>
-              <label class="question">37. ...</label><textarea name="q37" placeholder="Pl. sum(range(1,101))"></textarea>
-              <label class="question">38. ...</label><textarea name="q38"></textarea>
-              <label class="question">39. ...</label><textarea name="q39"></textarea>
-              <label class="question">40. ...</label><textarea name="q40"></textarea>
-              <label class="question">41. ...</label><textarea name="q41"></textarea>
-              <label class="question">42. ...</label><textarea name="q42"></textarea>
-              <label class="question">43. ...</label><textarea name="q43"></textarea>
-              <label class="question">44. ...</label><textarea name="q44"></textarea>
-              <label class="question">45. ...</label><textarea name="q45"></textarea>
+              <!-- 36..45 textareas -->
+              <label class="question">36. Bekér egy számot, és kiírja, hogy páros vagy páratlan:</label><textarea name="q36" placeholder="Pl. if szá%2==0: ..."></textarea>
+              <label class="question">37. Összeadja az 1–100 közötti számokat:</label><textarea name="q37" placeholder="Pl. sum(range(1,101))"></textarea>
+              <label class="question">38. Kiírja a szorzótáblát 1-től 10-ig:</label><textarea name="q38"></textarea>
+              <label class="question">39. Függvény: szám faktoriálisa:</label><textarea name="q39"></textarea>
+              <label class="question">40. Listából kiírja a legnagyobb számot:</label><textarea name="q40"></textarea>
+              <label class="question">41. Megszámolja, hány "a" van egy szövegben:</label><textarea name="q41"></textarea>
+              <label class="question">42. Kiírja egy fájlba az 1–10 közötti számokat:</label><textarea name="q42"></textarea>
+              <label class="question">43. Függvény: eldönti, hogy egy szám prím-e:</label><textarea name="q43"></textarea>
+              <label class="question">44. Addig kér be számokat, amíg a felhasználó 0-t nem ad meg:</label><textarea name="q44"></textarea>
+              <label class="question">45. Szótár: tárolja=név, életkor, város, majd kiírja őket:</label><textarea name="q45"></textarea>
 
               <div class="pager">
                 <button type="button" id="backToFill" class="ghost">Vissza</button>
@@ -392,18 +394,18 @@
           <ul>
             <li>A 20 feleletválasztós kérdést azonnal javítja a rendszer.</li>
             <li>A 15 behelyettesítéses és 10 programíró feladatot a tanár kézzel nézi át.</li>
-            <li>A válaszokat JSON-ként le lehet tölteni, hogy könnyen importálható legyen Excelbe vagy a tanári rendszerbe.</li>
+            <li>A válaszokat JSON-ként le lehet tölteni, és a tanár importálhatja vagy megnézheti őket a beépített adatbázisból (localStorage).</li>
           </ul>
 
           <details><summary>Rövid telepítési útmutató (ingyenes URL-hez)</summary>
             <ol>
-              <li>Hozz létre egy új GitHub repository-t. (pl. <code>python-quiz</code>)</li>
-              <li>Helyezd el ezt az <code>index.html</code> fájlt a repo gyökerébe és pushold fel.</li>
+              <li>Hozz létre egy új GitHub repository-t (pl. <code>python-quiz</code>).</li>
+              <li>Helyezd el ezt az <code>index.html</code> fájlt a repo gyökerébe és push-old fel.</li>
               <li>GitHub Pages: Settings &gt; Pages &gt; Branch: main &gt; / (root) &gt; Save. A site a <code>https://&lt;felhasználónév&gt;.github.io/&lt;repo&gt;</code> címen lesz elérhető.</li>
             </ol>
           </details>
 
-          <p class="question-meta" style="margin-top:10px">Használat: Diák kitölt — letölt JSON — tanár feltölt és javít a tanári felületen.</p>
+          <p class="question-meta" style="margin-top:10px">Használat: Diák kitölt — mentés a böngészőben (localStorage) — tanár belép (Tóth Alex GVM) és megnyitja a javító felületet.</p>
         </aside>
       </div>
 
@@ -418,7 +420,7 @@
       q11:'b',q12:'b',q13:'b',q14:'b',q15:'b',q16:'a',q17:'b',q18:'b',q19:'b',q20:'a'
     };
 
-    // elemek
+    // Elemi DOM
     const landing = document.getElementById('landing');
     const startBtn = document.getElementById('startBtn');
     const mcSection = document.getElementById('mc-section');
@@ -426,7 +428,7 @@
     const codeSection = document.getElementById('code-section');
     const resultArea = document.getElementById('resultArea');
 
-    // teacher elements
+    // teacher elems
     const teacherSection = document.getElementById('teacher-section');
     const fileInput = document.getElementById('fileInput');
     const processFilesBtn = document.getElementById('processFilesBtn');
@@ -442,10 +444,116 @@
     const downloadThis = document.getElementById('downloadThis');
     const exportAllCsv = document.getElementById('exportAllCsv');
     const exportAllJson = document.getElementById('exportAllJson');
+    const refreshDbBtn = document.getElementById('refreshDbBtn');
 
-    // state
-    window.submissions = []; // each: {meta, answers, mcCorrect, mcWrong, mcPercent, manual:{scores, total, comment}}
+    // in-memory state (mirrors DB)
+    window.submissions = [];
 
+    // localStorage key
+    const DB_KEY = 'python_quiz_submissions_v1';
+
+    // ---------- DB helpers (localStorage "adatbázis") ----------
+    function loadDB(){
+      try{
+        const raw = localStorage.getItem(DB_KEY);
+        if(!raw) return [];
+        const arr = JSON.parse(raw);
+        if(!Array.isArray(arr)) return [];
+        return arr;
+      }catch(e){
+        console.error('DB load error', e);
+        return [];
+      }
+    }
+
+    function saveDB(arr){
+      try{
+        localStorage.setItem(DB_KEY, JSON.stringify(arr));
+      }catch(e){
+        console.error('DB save error', e);
+      }
+    }
+
+    function pushToDB(sub){
+      const db = loadDB();
+      db.push(sub);
+      saveDB(db);
+      return sub.id;
+    }
+
+    function deleteFromDBById(id){
+      let db = loadDB();
+      db = db.filter(s=>s.id !== id);
+      saveDB(db);
+      return db;
+    }
+
+    function replaceInDB(id, newObj){
+      let db = loadDB();
+      db = db.map(s=> s.id === id ? newObj : s);
+      saveDB(db);
+      return db;
+    }
+
+    // ---------- Utility ----------
+    function makeId(){
+      return `${Date.now()}_${Math.random().toString(36).slice(2,9)}`;
+    }
+
+    function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+
+    // ---------- Save submission (student flow) ----------
+    function collectAllAnswers(){
+      const answers = {};
+      // mc
+      for(let i=1;i<=20;i++){
+        const radios = document.getElementsByName('q'+i);
+        const checked = Array.from(radios).find(r=>r.checked);
+        answers['q'+i] = checked ? checked.value : null;
+      }
+      // fill
+      for(let i=21;i<=35;i++){
+        const el = document.querySelector('[name="q'+i+'"]');
+        answers['q'+i] = el && el.value ? el.value.trim() : null;
+      }
+      // code
+      for(let i=36;i<=45;i++){
+        const el = document.querySelector('[name="q'+i+'"]');
+        answers['q'+i] = el && el.value ? el.value.trim() : null;
+      }
+      return answers;
+    }
+
+    function computeMCStats(answers){
+      let mcCorrect = 0; const mcWrong = [];
+      for(let i=1;i<=20;i++){
+        const v = answers['q'+i] || null;
+        if(v === correct['q'+i]) mcCorrect++; else mcWrong.push(i);
+      }
+      return {mcCorrect, mcWrong, mcPercent: Math.round((mcCorrect/20)*100)};
+    }
+
+    function saveSubmissionFromStudent(){
+      const answers = collectAllAnswers();
+      const meta = { generated: new Date().toISOString(), student: window.studentName || '(név hiányzik)', source:'local' };
+      const stats = computeMCStats(answers);
+      const sub = {
+        id: makeId(),
+        meta,
+        answers,
+        mcCorrect: stats.mcCorrect,
+        mcWrong: stats.mcWrong,
+        mcPercent: stats.mcPercent,
+        manual:{scores:{}, total:null, comment:null}
+      };
+      pushToDB(sub);
+      // update in-memory copy and UI if teacher is viewing
+      window.submissions = loadDB();
+      refreshTeacherTable();
+      return sub;
+    }
+
+    // ---------- UI flows ----------
     startBtn.addEventListener('click',()=>{
       const name = document.getElementById('studentName').value.trim();
       if(!name){ alert('Kérlek add meg a neved!'); return; }
@@ -460,6 +568,9 @@
         window.isTeacher = true;
         window.studentName = name;
         window.answers = {};
+        // load DB into memory and refresh
+        window.submissions = loadDB();
+        refreshTeacherTable();
         return;
       }
 
@@ -471,7 +582,7 @@
       window.answers = {};
     });
 
-    // STUDENT NAVIGATION (same logic as before)
+    // STUDENT NAVIGATION
     document.getElementById('toFill').addEventListener('click', ()=>{
       for(let i=1;i<=20;i++){
         const radios = document.getElementsByName('q'+i);
@@ -499,20 +610,32 @@
       for(let i=36;i<=45;i++){ const el = document.querySelector('[name="q'+i+'"]'); if(!el || !el.value.trim()){ alert('Kérlek válaszolj minden programíró feladatra (36-45).'); return; } }
       for(let i=36;i<=45;i++) window.answers['q'+i] = document.querySelector('[name="q'+i+'"]').value.trim();
 
-      mcScore();
+      // Automatikus javítás és mentés a "DB"-be
+      const sub = saveSubmissionFromStudent();
+      mcScore(sub);
       resultArea.scrollIntoView({behavior:'smooth'});
+
+      // informáljuk a diákot
+      resultArea.innerHTML += `<div class="small" style="margin-top:8px;color:var(--muted)">Válaszod elmentve az oldal helyi adatbázisába (localStorage). Ha szeretnéd, letöltheted JSON-ként is.</div>`;
     });
 
-    function mcScore(){
+    // automatikus javítás (feleletválasztók) - képes megkapni submission objektumot is
+    function mcScore(sub){
       let correctCount=0; const wrong=[];
-      for(let i=1;i<=20;i++){
-        const a = window.answers['q'+i];
-        if(a===correct['q'+i]){ correctCount++; } else wrong.push(i);
+      if(sub && sub.mcCorrect !== undefined){
+        correctCount = sub.mcCorrect;
+        wrong.push(...sub.mcWrong);
+      }else{
+        // fallback: use window.answers
+        for(let i=1;i<=20;i++){
+          const a = window.answers['q'+i];
+          if(a===correct['q'+i]){ correctCount++; } else wrong.push(i);
+        }
       }
       const percent = Math.round((correctCount/20)*100);
       resultArea.innerHTML = `<div class="result">Automatikus javítás (feleletválasztók): ${correctCount}/20 (${percent}%)</div>`;
       if(wrong.length) resultArea.innerHTML += `<div style="margin-top:8px;color:var(--muted)">Hibás kérdések: ${wrong.join(', ')}</div>`;
-      resultArea.innerHTML += `<div style="margin-top:10px;color:var(--muted)">A teljes válaszcsomag letölthető JSON-ként és elküldhető a tanárnak.</div>`;
+      resultArea.innerHTML += `<div style="margin-top:10px;color:var(--muted)">A teljes válaszcsomag letölthető JSON-ként.</div>`;
     }
 
     document.getElementById('gradeBtn').addEventListener('click', ()=>{
@@ -520,20 +643,38 @@
       mcScore();
     });
 
-    // student JSON download
+    // student JSON download (mentés is)
     document.getElementById('downloadBtn').addEventListener('click', ()=>{
+      // collect and ensure window.answers populated
       for(let i=1;i<=20;i++){ const radios = document.getElementsByName('q'+i); const checked = Array.from(radios).find(r=>r.checked); window.answers['q'+i] = checked ? checked.value : (window.answers['q'+i] || null); }
       for(let i=21;i<=35;i++){ const el = document.querySelector('[name="q'+i+'"]'); window.answers['q'+i] = el && el.value ? el.value.trim() : (window.answers['q'+i] || null); }
       for(let i=36;i<=45;i++){ const el = document.querySelector('[name="q'+i+'"]'); window.answers['q'+i] = el && el.value ? el.value.trim() : (window.answers['q'+i] || null); }
 
       const payload = { meta:{generated:new Date().toISOString(), quiz:"Python alapok - 45", student: window.studentName || null}, answers: window.answers || {} };
+
+      // Save to DB as well (avoid duplicate identical entries: still save, it's intentional)
+      const stats = computeMCStats(payload.answers);
+      const sub = {
+        id: makeId(),
+        meta: payload.meta,
+        answers: payload.answers,
+        mcCorrect: stats.mcCorrect,
+        mcWrong: stats.mcWrong,
+        mcPercent: stats.mcPercent,
+        manual:{scores:{}, total:null, comment:null}
+      };
+      pushToDB(sub);
+      window.submissions = loadDB();
+      refreshTeacherTable();
+
       const blob = new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a'); a.href=url; a.download=(window.studentName?window.studentName.replace(/\s+/g,'_'):'student')+"_answers.json"; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+      alert('Válaszod elmentve és letöltés indítva.');
     });
 
     /* ------------------------
-       TEACHER: file processing
+       TEACHER: file processing & DB sync
        ------------------------ */
     processFilesBtn.addEventListener('click', ()=> {
       const files = fileInput.files;
@@ -541,38 +682,41 @@
       const readers = [];
       for(const f of files){
         readers.push(readFileAsText(f).then(text=>{
-          try{ return JSON.parse(text); } catch(e){ return {__invalid__:true, name:f.name, raw:text}; }
+          try{ return { parsed: JSON.parse(text), filename: f.name }; } catch(e){ return {__invalid__:true, name:f.name, raw:text}; }
         }));
       }
       Promise.all(readers).then(results=>{
         let added=0;
         for(const doc of results){
           if(doc && doc.__invalid__){ console.warn('Nem érvényes JSON:', doc.name); continue; }
-          // validate structure
-          const meta = doc.meta || {};
-          const answers = doc.answers || {};
-          const student = meta.student || ('(név hiányzik)');
-          const generated = meta.generated || '(dátum hiányzik)';
-          // compute MC
+          const parsed = doc.parsed;
+          const meta = parsed.meta || {};
+          const answers = parsed.answers || {};
+          const student = meta.student || '(név hiányzik)';
+          const generated = meta.generated || new Date().toISOString();
+          // compute MC stats
           let mcCorrect=0; const mcWrong=[];
           for(let i=1;i<=20;i++){
             const v = answers['q'+i] || null;
             if(v === correct['q'+i]) mcCorrect++; else mcWrong.push(i);
           }
           const mcPercent = Math.round((mcCorrect/20)*100);
-          // push to submissions
-          window.submissions.push({
-            meta:{student,generated,sourceFile:meta.sourceFile || null},
+          // compose submission
+          const sub = {
+            id: makeId(),
+            meta:{student,generated,sourceFile: doc.filename || meta.sourceFile || 'uploaded'},
             answers,
             mcCorrect, mcWrong, mcPercent,
             manual:{scores:{}, total:null, comment:null}
-          });
+          };
+          pushToDB(sub);
           added++;
         }
         if(added===0) alert('Nem találtam feldolgozható beküldést a fájlokban. Ellenőrizd a JSON szerkezetét.');
         else {
+          window.submissions = loadDB();
           refreshTeacherTable();
-          alert(added + ' beküldés feldolgozva.');
+          alert(added + ' beküldés feldolgozva és elmentve az adatbázisba.');
         }
       });
     });
@@ -586,6 +730,13 @@
       });
     }
 
+    refreshDbBtn.addEventListener('click', ()=>{
+      window.submissions = loadDB();
+      refreshTeacherTable();
+      alert('Adatbázis frissítve.');
+    });
+
+    // Refresh teacher table from window.submissions
     function refreshTeacherTable(){
       teacherTableBody.innerHTML='';
       window.submissions.forEach((s, idx)=>{
@@ -602,7 +753,10 @@
                         <td>${pct}</td>
                         <td>${man}</td>
                         <td class="right">${total}</td>
-                        <td><button data-idx="${idx}" class="viewBtn">Megnéz</button></td>`;
+                        <td>
+                          <button data-idx="${idx}" class="viewBtn small-btn">Megnéz</button>
+                          <button data-id="${s.id}" class="delBtn ghost small-btn">Töröl</button>
+                        </td>`;
         teacherTableBody.appendChild(tr);
       });
       subCountBadge.textContent = window.submissions.length + ' beküldés';
@@ -613,13 +767,22 @@
           openDetails(idx);
         });
       });
+      // attach delete handlers
+      Array.from(document.getElementsByClassName('delBtn')).forEach(btn=>{
+        btn.addEventListener('click',(e)=>{
+          const id = btn.getAttribute('data-id');
+          if(!confirm('Biztosan törlöd ezt a beküldést az adatbázisból?')) return;
+          deleteFromDBById(id);
+          window.submissions = loadDB();
+          refreshTeacherTable();
+        });
+      });
     }
 
     function computeTotalForDisplay(s){
-      // Example: MC 20 pont, manual sum max 100? we choose: MC scaled to 20, manual (36-45) each 0-10 => max 100.
       const mcPoints = s.mcCorrect; // 0-20
       const manualTotal = s.manual.total !== null ? s.manual.total : 0;
-      const total = mcPoints + manualTotal; // simple aggregation
+      const total = mcPoints + manualTotal; // egyszerű aggregáció
       return total;
     }
 
@@ -654,7 +817,7 @@
       teacherComment.value = s.manual.comment || '';
       teacherDetails.classList.remove('hidden');
 
-      // save handler
+      // save handler (rebind for this open)
       saveManual.onclick = ()=> {
         const inputs = manualGrades.querySelectorAll('input[data-q]');
         let sum=0; const scores={};
@@ -668,11 +831,14 @@
         s.manual.scores = scores;
         s.manual.total = sum;
         s.manual.comment = teacherComment.value.trim() || null;
+        // write back to DB
+        replaceInDB(s.id, s);
         tdSaveMsg('Mentve.');
+        window.submissions = loadDB();
         refreshTeacherTable();
       };
 
-      // download this submission
+      // download selected submission
       downloadThis.onclick = ()=>{
         const payload = { meta: s.meta, answers: s.answers, mcCorrect: s.mcCorrect, mcWrong: s.mcWrong, manual: s.manual };
         const blob = new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
@@ -687,22 +853,22 @@
       setTimeout(()=>el.textContent = '', 3000);
     }
 
-    function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
-
     // Export aggregated CSV / JSON
     exportAllJson.addEventListener('click', ()=>{
-      if(window.submissions.length===0){ alert('Nincsenek beküldések.'); return; }
-      const blob = new Blob([JSON.stringify(window.submissions,null,2)],{type:'application/json'});
+      const db = loadDB();
+      if(db.length===0){ alert('Nincsenek beküldések.'); return; }
+      const blob = new Blob([JSON.stringify(db,null,2)],{type:'application/json'});
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a'); a.href=url; a.download='all_submissions.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
     });
 
     exportAllCsv.addEventListener('click', ()=>{
-      if(window.submissions.length===0){ alert('Nincsenek beküldések.'); return; }
+      const db = loadDB();
+      if(db.length===0){ alert('Nincsenek beküldések.'); return; }
       const rows = [];
       const header = ['student','generated','mcCorrect','mcPercent','manualTotal','total','comment','answers_json'];
       rows.push(header.join(','));
-      window.submissions.forEach(s=>{
+      db.forEach(s=>{
         const mc = s.mcCorrect;
         const pct = s.mcPercent;
         const man = s.manual.total !== null ? s.manual.total : '';
@@ -718,16 +884,7 @@
       const a = document.createElement('a'); a.href=url; a.download='submissions.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
     });
 
-    // helper: when teacher uploads raw JSONs that came from students, make sure we record source file name
-    fileInput.addEventListener('change', (e)=>{
-      // annotate meta.sourceFile later in processFilesBtn flow if desired
-      // nothing else needed here
-    });
-
-    // small convenience: when parsing JSONs, if meta.generated missing, set to file timestamp
-    // Already handled above.
-
-    // initial small UI tidy
+    // initial UI tidy: hide teacher area until login
     teacherSection.classList.add('hidden');
 
   </script>
