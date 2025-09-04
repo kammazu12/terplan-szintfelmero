@@ -618,10 +618,11 @@
       // ...ellenőrzések, válaszok összegyűjtése
       const payload = { meta: { student: window.studentName }, answers: window.answers };
 
-      fetch("https://script.google.https://script.google.com/macros/s/AKfycbwPNsnW86GymGhGvT57EKe0BFuFUnvOCUfQ1jaYQlLO3bsaHm_5vcZgsBCGW90AKR5sqA/exec/macros/s/AKfycb.../exec", {
-        method: "POST",
-        body: JSON.stringify(payload)
-      })
+      fetch("https://script.google.com/macros/s/AKfycbwPNsnW86GymGhGvT57EKe0BFuFUnvOCUfQ1jaYQlLO3bsaHm_5vcZgsBCGW90AKR5sqA/exec", {
+          method: "POST",
+          body: JSON.stringify(payload)
+        })
+
       .then(res => res.json())
       .then(data => console.log("Beküldve:", data))
       .catch(err => console.error("Hiba a beküldésnél:", err));
