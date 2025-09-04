@@ -74,7 +74,7 @@
     <header>
       <div class="brand"><strong>Python alapok — 10. osztály</strong></div>
       <div>
-        <h1>45 kérdéses vegyes kvíz</h1>
+        <h1>33 kérdéses vegyes kvíz</h1>
       </div>
     </header>
 
@@ -573,8 +573,8 @@ print(x)</pre></code>
     document.getElementById('backToFill').addEventListener('click',()=>{ codeSection.classList.add('hidden'); fillSection.classList.remove('hidden'); window.scrollTo(0,0); });
 
     document.getElementById('finishBtn').addEventListener('click',()=>{
-      for(let i=36;i<=45;i++){ const el = document.querySelector('[name="q'+i+'"]'); if(!el || !el.value.trim()){ alert('Kérlek válaszolj minden programíró feladatra (36-45).'); return; } }
-      for(let i=36;i<=45;i++) window.answers['q'+i] = document.querySelector('[name="q'+i+'"]').value.trim();
+      for(let i=31;i<=33;i++){ const el = document.querySelector('[name="q'+i+'"]'); if(!el || !el.value.trim()){ alert('Kérlek válaszolj minden programíró feladatra (36-45).'); return; } }
+      for(let i=31;i<=33;i++) window.answers['q'+i] = document.querySelector('[name="q'+i+'"]').value.trim();
 
       // Automatikus javítás és mentés a "DB"-be
       const sub = saveSubmissionFromStudent();
@@ -628,8 +628,8 @@ print(x)</pre></code>
     document.getElementById('downloadBtn').addEventListener('click', ()=>{
       // collect and ensure window.answers populated
       for(let i=1;i<=20;i++){ const radios = document.getElementsByName('q'+i); const checked = Array.from(radios).find(r=>r.checked); window.answers['q'+i] = checked ? checked.value : (window.answers['q'+i] || null); }
-      for(let i=21;i<=35;i++){ const el = document.querySelector('[name="q'+i+'"]'); window.answers['q'+i] = el && el.value ? el.value.trim() : (window.answers['q'+i] || null); }
-      for(let i=36;i<=45;i++){ const el = document.querySelector('[name="q'+i+'"]'); window.answers['q'+i] = el && el.value ? el.value.trim() : (window.answers['q'+i] || null); }
+      for(let i=21;i<=30;i++){ const el = document.querySelector('[name="q'+i+'"]'); window.answers['q'+i] = el && el.value ? el.value.trim() : (window.answers['q'+i] || null); }
+      for(let i=31;i<=33;i++){ const el = document.querySelector('[name="q'+i+'"]'); window.answers['q'+i] = el && el.value ? el.value.trim() : (window.answers['q'+i] || null); }
 
       const payload = { meta:{generated:new Date().toISOString(), quiz:"Python alapok - 45", student: window.studentName || null}, answers: window.answers || {} };
 
@@ -780,16 +780,16 @@ print(x)</pre></code>
       }
       html += '</div><hr style="opacity:.06"/>';
       html += '<strong>Behelyettesítés (21-35):</strong><div class="small">';
-      for(let i=21;i<=35;i++){ html += `<div>${i}. ${escapeHtml(s.answers['q'+i] || '')}</div>`; }
+      for(let i=21;i<=30;i++){ html += `<div>${i}. ${escapeHtml(s.answers['q'+i] || '')}</div>`; }
       html += '</div><hr style="opacity:.06"/>';
       html += '<strong>Kód (36-45):</strong><div class="small">';
-      for(let i=36;i<=45;i++){ html += `<div>${i}. <pre style="white-space:pre-wrap;margin:0">${escapeHtml(s.answers['q'+i] || '')}</pre></div>`; }
+      for(let i=31;i<=33;i++){ html += `<div>${i}. <pre style="white-space:pre-wrap;margin:0">${escapeHtml(s.answers['q'+i] || '')}</pre></div>`; }
       html += '</div>';
       tdAnswers.innerHTML = html;
 
       // manual grades inputs
       manualGrades.innerHTML = '';
-      for(let i=36;i<=45;i++){
+      for(let i=31;i<=33;i++){
         const existing = s.manual.scores && (s.manual.scores[i]? s.manual.scores[i] : '');
         const wrapper = document.createElement('div');
         wrapper.innerHTML = `<label class="small">${i}:</label><input type="number" min="0" max="10" step="1" data-q="${i}" value="${existing}" />`;
