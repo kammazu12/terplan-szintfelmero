@@ -592,10 +592,6 @@ print(x)</pre></code>
       .catch(err => console.error("Hiba a beküldésnél:", err));
 
       alert("Válaszaid elküldve!");
-
-
-      // informáljuk a diákot
-      resultArea.innerHTML += `<div class="small" style="margin-top:8px;color:var(--muted)">Válaszod elmentve az oldal helyi adatbázisába (localStorage). Ha szeretnéd, letöltheted JSON-ként is.</div>`;
     });
 
     // automatikus javítás (feleletválasztók) - képes megkapni submission objektumot is
@@ -614,7 +610,6 @@ print(x)</pre></code>
       const percent = Math.round((correctCount/20)*100);
       resultArea.innerHTML = `<div class="result">Automatikus javítás (feleletválasztók): ${correctCount}/20 (${percent}%)</div>`;
       if(wrong.length) resultArea.innerHTML += `<div style="margin-top:8px;color:var(--muted)">Hibás kérdések: ${wrong.join(', ')}</div>`;
-      resultArea.innerHTML += `<div style="margin-top:10px;color:var(--muted)">A teljes válaszcsomag letölthető JSON-ként.</div>`;
     }
 
     document.getElementById('gradeBtn').addEventListener('click', ()=>{
