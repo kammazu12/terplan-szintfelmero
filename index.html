@@ -197,7 +197,7 @@
               </div>
 
               <!-- 7 -->
-              <label class="question">7. Hogyan írjuk helyesen a logikai értékeket?</label>
+              <label class="question">7. Hogyan írjuk helyesen a logikai értékeket Pythonban?</label>
               <div class="choices">
                 <label class="choice"><input type="radio" name="q7" value="a"> a) TRUE, FALSE</label>
                 <label class="choice"><input type="radio" name="q7" value="b"> b) true, false</label>
@@ -224,12 +224,12 @@
               </div>
 
               <!-- 10 -->
-              <label class="question">10. Mi történik, ha lefut ez a kód? <pre style="display:inline">szam = 5\nprint(szam == 5)</pre></label>
+              <label class="question">10. Mit ír ki a kód lefutás után? <pre>szam = 5<br/>print(szam == 5)</pre></label>
               <div class="choices">
-                <label class="choice"><input type="radio" name="q10" value="a"> a) Kiírja: True</label>
-                <label class="choice"><input type="radio" name="q10" value="b"> b) Kiírja: 5</label>
+                <label class="choice"><input type="radio" name="q10" value="a"> a) Igaz értéket</label>
+                <label class="choice"><input type="radio" name="q10" value="b"> b) 5</label>
                 <label class="choice"><input type="radio" name="q10" value="c"> c) Hibaüzenet</label>
-                <label class="choice"><input type="radio" name="q10" value="d"> d) Kiírja: szam</label>
+                <label class="choice"><input type="radio" name="q10" value="d"> d) szam</label>
               </div>
 
               <!-- 11 -->
@@ -260,7 +260,7 @@
               </div>
 
               <!-- 14 -->
-              <label class="question">14. Mi lesz a következő kód kimenete? <pre style="display:inline">for i in range(3):\n    print(i)</pre></label>
+              <label class="question">14. Mi lesz a következő kód kimenete? <pre>for i in range(3):<br/>    print(i)</pre></label>
               <div class="choices">
                 <label class="choice"><input type="radio" name="q14" value="a"> a) 1 2 3</label>
                 <label class="choice"><input type="radio" name="q14" value="b"> b) 0 1 2</label>
@@ -330,25 +330,27 @@
               <h2>II. Behelyettesítés / Kódkiegészítés <span class="required-star">*</span></h2>
 
               <!-- 21..35 inputs -->
-              <label class="question">21. Egészítsd ki: <code>for i in range(1, ___):\n    print(i ** 2)</code></label>
-              <input type="text" name="q21" placeholder="Pl.: 6">
-              <label class="question">22. Hiányzó kulcsszó: ...</label><input type="text" name="q22" placeholder="Pl.: elif">
-              <label class="question">23. ...</label><input type="text" name="q23" placeholder="Pl.: def">
-              <label class="question">24. ...</label><input type="text" name="q24" placeholder="Pl.: 0">
-              <label class="question">25. ...</label><input type="text" name="q25" placeholder="Pl.: lower">
-              <label class="question">26. ...</label><input type="text" name="q26" placeholder="Pl.: for">
-              <label class="question">27. ...</label><input type="text" name="q27" placeholder="Pl.: i">
-              <label class="question">28. ...</label><input type="text" name="q28" placeholder="Pl.: int">
-              <label class="question">29. ...</label><input type="text" name="q29" placeholder="Pl.: 'w'">
-              <label class="question">30. ...</label><input type="text" name="q30" placeholder="Pl.: append">
-              <label class="question">31. ...</label><input type="text" name="q31" placeholder="Pl.: while">
-              <label class="question">32. ...</label><input type="text" name="q32" placeholder="Pl.: betu">
-              <label class="question">33. ...</label><input type="text" name="q33" placeholder="Pl.: x">
-              <label class="question">34. ...</label><input type="text" name="q34" placeholder="Pl.: 5">
-              <label class="question">35. ...</label><input type="text" name="q35" placeholder="Pl.: range(1,6)">
+              <label class="question">21. Melyik szimbólum jelöli Pythonban a maradékképzést?</code></label>
+              <input type="text" name="q21">
+              <label class="question">22. Mennyi a <code>(4 - 3 // 2 + 1)</code> művelet eredménye?</label><input type="text" name="q22">
+              <label class="question">23. Mit ír ki az alábbi kód? <br>
+                <pre><code>x = 5
+y = 10
+if (x + 5) > y:
+    x = y
+else:
+    x = x + y
+print(x)</pre></code>
+</label><input type="text" name="q23">
+              <label class="question">24. Írd le saját szavaiddal, mi a különbség a ... és a pass kulcsszó között!</label><input type="text" name="q24">
+              <label class="question">25. Mi az egész szám típus neve Pythonban?<label><input type="text" name="q25">
+              <label class="question">26. Mi az alábbi érték típusa: <i>"123321"</i>?</label><input type="text" name="q26">
+              <label class="question">27. Mi az alábbi érték típusa: <i>123321</i>?</label><input type="text" name="q27" >
+              <label class="question">28. Mi az alábbi érték típusa: <i>"123.321"</i>?</label><input type="text" name="q28">
+              <label class="question">29. Mi az alábbi érték típusa: <i>[1, 2, 3, 3, 2, 1]</i>?</label><input type="text" name="q29">
+              <label class="question">30. Mi az alábbi érték típusa: <i>-123_321</i>?</label><input type="text" name="q30">
 
               <div class="pager">
-                <button type="button" id="backToMC" class="ghost">Vissza</button>
                 <button type="button" id="toCode">Tovább a kódoláshoz</button>
               </div>
             </section>
@@ -356,21 +358,14 @@
             <!-- III. Rövid programíró feladatok (10) -->
             <section id="code-section" class="hidden">
               <h2>III. Rövid programíró feladatok <span class="required-star">*</span></h2>
+              <h3>Figyelj a Python szintaktikára!</h3>
 
               <!-- 36..45 textareas -->
-              <label class="question">36. Bekér egy számot, és kiírja, hogy páros vagy páratlan:</label><textarea name="q36" placeholder="Pl. if szá%2==0: ..."></textarea>
-              <label class="question">37. Összeadja az 1–100 közötti számokat:</label><textarea name="q37" placeholder="Pl. sum(range(1,101))"></textarea>
-              <label class="question">38. Kiírja a szorzótáblát 1-től 10-ig:</label><textarea name="q38"></textarea>
-              <label class="question">39. Függvény: szám faktoriálisa:</label><textarea name="q39"></textarea>
-              <label class="question">40. Listából kiírja a legnagyobb számot:</label><textarea name="q40"></textarea>
-              <label class="question">41. Megszámolja, hány "a" van egy szövegben:</label><textarea name="q41"></textarea>
-              <label class="question">42. Kiírja egy fájlba az 1–10 közötti számokat:</label><textarea name="q42"></textarea>
-              <label class="question">43. Függvény: eldönti, hogy egy szám prím-e:</label><textarea name="q43"></textarea>
-              <label class="question">44. Addig kér be számokat, amíg a felhasználó 0-t nem ad meg:</label><textarea name="q44"></textarea>
-              <label class="question">45. Szótár: tárolja=név, életkor, város, majd kiírja őket:</label><textarea name="q45"></textarea>
+              <label class="question">31. Írj egy programot, ami kiírja a teljes nevedet!</label><textarea name="q31"></textarea>
+              <label class="question">32. Írj egy programot, ami bekér a felhasználótól egy számot és kiírja ennek a dupláját!</label><textarea name="q32"></textarea>
+              <label class="question">33. Írj egy programot, ami bekér a felhasználótól egy számot és kiírja, hogy a szám páros vagy páratlan!</label><textarea name="q33"></textarea>
 
               <div class="pager">
-                <button type="button" id="backToFill" class="ghost">Vissza</button>
                 <button type="button" id="finishBtn">Befejezés</button>
               </div>
             </section>
