@@ -707,4 +707,29 @@
         const pct = s.mcPercent;
         const man = s.manual.total !== null ? s.manual.total : '';
         const total = computeTotalForDisplay(s);
-    
+        const comment = s.manual.comment ? `"${String(s.manual.comment).replace(/\"/g,'""')}"` : '';
+        const answersStr = `"${JSON.stringify(s.answers).replace(/\"/g,'""')}"`;
+        const row = [ `"${s.meta.student.replace(/\"/g,'""')}"`, `"${s.meta.generated}"`, mc, pct, man, total, comment, answersStr ];
+        rows.push(row.join(','));
+      });
+      const csv = rows.join('\n');
+      const blob = new Blob([csv],{type:'text/csv;charset=utf-8;'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href=url; a.download='submissions.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    });
+
+    // helper: when teacher uploads raw JSONs that came from students, make sure we record source file name
+    fileInput.addEventListener('change', (e)=>{
+      // annotate meta.sourceFile later in processFilesBtn flow if desired
+      // nothing else needed here
+    });
+
+    // small convenience: when parsing JSONs, if meta.generated missing, set to file timestamp
+    // Already handled above.
+
+    // initial small UI tidy
+    teacherSection.classList.add('hidden');
+
+  </script>
+</body>
+</html>
