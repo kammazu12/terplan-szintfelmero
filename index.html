@@ -564,16 +564,14 @@ print(x)</pre></code>
       window.scrollTo(0,0);
     });
 
-    document.getElementById('backToMC').addEventListener('click',()=>{ fillSection.classList.add('hidden'); mcSection.classList.remove('hidden'); window.scrollTo(0,0); });
     document.getElementById('toCode').addEventListener('click',()=>{
-      for(let i=21;i<=30;i++){ const el = document.querySelector('[name="q'+i+'"]'); if(!el || !el.value.trim()){ alert('Kérlek válaszolj minden behelyettesítéses kérdésre (21-35).'); return; } }
+      for(let i=21;i<=30;i++){ const el = document.querySelector('[name="q'+i+'"]'); if(!el || !el.value.trim()){ alert('Kérlek válaszolj minden behelyettesítéses kérdésre (21-30).'); return; } }
       for(let i=21;i<=30;i++) window.answers['q'+i] = document.querySelector('[name="q'+i+'"]').value.trim();
       fillSection.classList.add('hidden'); codeSection.classList.remove('hidden'); window.scrollTo(0,0);
     });
-    document.getElementById('backToFill').addEventListener('click',()=>{ codeSection.classList.add('hidden'); fillSection.classList.remove('hidden'); window.scrollTo(0,0); });
 
     document.getElementById('finishBtn').addEventListener('click',()=>{
-      for(let i=31;i<=33;i++){ const el = document.querySelector('[name="q'+i+'"]'); if(!el || !el.value.trim()){ alert('Kérlek válaszolj minden programíró feladatra (36-45).'); return; } }
+      for(let i=31;i<=33;i++){ const el = document.querySelector('[name="q'+i+'"]'); if(!el || !el.value.trim()){ alert('Kérlek válaszolj minden programíró feladatra (31-33).'); return; } }
       for(let i=31;i<=33;i++) window.answers['q'+i] = document.querySelector('[name="q'+i+'"]').value.trim();
 
       // Automatikus javítás és mentés a "DB"-be
@@ -631,7 +629,7 @@ print(x)</pre></code>
       for(let i=21;i<=30;i++){ const el = document.querySelector('[name="q'+i+'"]'); window.answers['q'+i] = el && el.value ? el.value.trim() : (window.answers['q'+i] || null); }
       for(let i=31;i<=33;i++){ const el = document.querySelector('[name="q'+i+'"]'); window.answers['q'+i] = el && el.value ? el.value.trim() : (window.answers['q'+i] || null); }
 
-      const payload = { meta:{generated:new Date().toISOString(), quiz:"Python alapok - 45", student: window.studentName || null}, answers: window.answers || {} };
+      const payload = { meta:{generated:new Date().toISOString(), quiz:"Python alapok - 33", student: window.studentName || null}, answers: window.answers || {} };
 
       // Save to DB as well (avoid duplicate identical entries: still save, it's intentional)
       const stats = computeMCStats(payload.answers);
