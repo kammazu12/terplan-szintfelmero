@@ -1,0 +1,710 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Python alapok kvíz — 10. osztály</title>
+  <style>
+    /* Minimalista, letisztult CSS - egyszerű és jól kinéző */
+    :root{
+      --bg:#0f1724;
+      --card:#0b1220;
+      --accent:#7dd3fc;
+      --muted:#94a3b8;
+      --glass: rgba(255,255,255,0.03);
+      --radius:12px;
+      --maxw:1100px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color-scheme: dark;
+    }
+    html,body{height:100%;}
+    body{
+      margin:0;
+      background:linear-gradient(180deg, #07101a 0%, var(--bg) 100%);
+      display:flex;
+      justify-content:center;
+      padding:28px 18px;
+      color:#e6eef6;
+      -webkit-font-smoothing:antialiased;
+    }
+    .wrap{width:100%;max-width:var(--maxw);}
+    header{display:flex;gap:18px;align-items:center;margin-bottom:18px;}
+    .brand{background:linear-gradient(135deg, rgba(125,211,252,0.15), rgba(99,102,241,0.06));padding:10px 14px;border-radius:12px;box-shadow:0 6px 20px rgba(2,6,23,0.6);}
+    h1{margin:0;font-size:20px}
+    p.lead{margin:0;color:var(--muted);font-size:13px}
+    main.card{background:linear-gradient(180deg, rgba(255,255,255,0.02), var(--card));border-radius:var(--radius);padding:18px;box-shadow:0 8px 30px rgba(2,6,23,0.6);}
+    .landing{padding:18px;background:var(--glass);border-radius:10px;margin-bottom:12px;display:flex;gap:10px;align-items:center;justify-content:space-between;}
+    .landing input{padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    section{margin-top:14px;padding:12px;background:var(--glass);border-radius:10px;}
+    h2{font-size:15px;margin:6px 0}
+    label.question{display:block;margin:10px 0;font-size:14px}
+    .choices{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+    .choice{display:flex;gap:8px;align-items:center}
+    input[type=radio], input[type=checkbox]{transform:scale(1.05)}
+    input[type=text], textarea, select{width:100%;padding:8px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;font-size:14px;outline:none;resize:vertical;min-height:40px}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    button{background:var(--accent);color:#042029;border:none;padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:600}
+    button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted);font-weight:600}
+    .result{margin-top:12px;padding:10px;border-radius:8px;background:rgba(125,211,252,0.06);color:var(--accent);font-weight:700}
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:14px}
+    @media (max-width:920px){.grid{grid-template-columns:1fr}}
+    aside.side{padding:12px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));border-radius:10px;font-size:13px;color:var(--muted)}
+    footer{color:var(--muted);font-size:13px;margin-top:12px}
+    details[open] summary::after{content:" (bezárható)";font-size:12px;color:var(--muted)}
+    summary{cursor:pointer}
+    .wrong{color:#ffb4b4}
+    .correct{color:#b7f5d0}
+    .question-meta{font-size:12px;color:var(--muted)}
+    .hidden{display:none}
+    .pager{display:flex;justify-content:space-between;margin-top:12px}
+    .required-star{color:#ffb3b3;margin-left:6px}
+    table{width:100%;border-collapse:collapse;margin-top:8px}
+    th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.03);font-size:13px;text-align:left}
+    .small{font-size:12px;color:var(--muted)}
+    .teacher-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .badge{background:rgba(125,211,252,0.06);color:var(--accent);padding:4px 8px;border-radius:8px;font-weight:700}
+    .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, \"Roboto Mono\", monospace;font-size:13px}
+    .flex{display:flex;gap:8px;align-items:center}
+    .right{text-align:right}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand"><strong>Python alapok — 10. osztály</strong></div>
+      <div>
+        <h1>45 kérdéses vegyes kvíz</h1>
+        <p class="lead">Feleletválasztó, behelyettesítéses és programíró feladatok — egyszerű, tanárbarát gyűjtéssel.</p>
+      </div>
+    </header>
+
+    <main class="card">
+      <div class="grid">
+        <div>
+          <!-- Landing / registration -->
+          <div class="landing" id="landing">
+            <div><strong>Regisztráció</strong><div class="question-meta">Add meg a saját neved (kötelező)</div></div>
+            <div style="flex:1;margin:0 12px"><input id="studentName" type="text" placeholder="Pl.: Kovács Anna" /></div>
+            <div><button id="startBtn">Kezdés</button></div>
+          </div>
+
+          <!-- TEACHER SECTION (hidden until teacher name entered) -->
+          <section id="teacher-section" class="hidden">
+            <h2>Tanári felület — Javító</h2>
+            <p class="small">Ha a diákok JSON fájljait kapod, töltsd fel ide őket. A rendszer automatikusan kiértékeli az 1–20. feleletválasztós kérdéseket.</p>
+
+            <div class="teacher-controls" style="margin-top:8px">
+              <input type="file" id="fileInput" accept=".json,application/json" multiple />
+              <button id="processFilesBtn">Feldolgoz</button>
+              <button id="exportAllCsv" class="ghost">Export CSV</button>
+              <button id="exportAllJson" class="ghost">Export JSON</button>
+              <div class="badge" id="subCount">0 beküldés</div>
+            </div>
+
+            <div id="teacherTableWrap" style="margin-top:12px">
+              <table id="teacherTable" class="mono">
+                <thead>
+                  <tr><th>Diák</th><th>Beküldés ideje</th><th>MC (20)</th><th>%</th><th>Man. össz</th><th>Teljes</th><th>Műveletek</th></tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+
+            <div id="teacherDetails" class="hidden" style="margin-top:12px;padding:10px;border-radius:8px;background:rgba(255,255,255,0.02)">
+              <h3 id="td-student">Részletek</h3>
+              <div id="td-meta" class="small"></div>
+              <div id="td-answers" style="margin-top:10px;max-height:300px;overflow:auto;font-size:13px"></div>
+
+              <hr style="opacity:.06;margin:10px 0" />
+
+              <div class="small">Manuális pontozás (36–45): adj pontokat 0–10 skálán minden feladatra, majd mentsd.</div>
+              <div id="manualGrades" style="margin-top:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+                <!-- inputs inserted dynamically -->
+              </div>
+
+              <div style="margin-top:8px;display:flex;gap:8px;align-items:center">
+                <textarea id="teacherComment" placeholder="Megjegyzés (opcionális)" style="flex:1;min-height:60px"></textarea>
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <button id="saveManual" style="white-space:nowrap">Mentés</button>
+                  <button id="downloadThis" class="ghost">Letöltés (JSON)</button>
+                </div>
+              </div>
+
+              <div style="margin-top:8px" id="td-save-msg" class="small"></div>
+            </div>
+          </section>
+
+          <!-- QUIZ FORM START (student view) -->
+          <form id="quizForm">
+            <!-- I. Feleletválasztós (20) -->
+            <section id="mc-section" class="hidden">
+              <h2>I. Feleletválasztós kérdések <span class="required-star">*</span></h2>
+
+              <!-- (questions 1..20 as in previous file) -->
+              <!-- 1 -->
+              <label class="question">1. Melyik helyes változónév Pythonban?</label>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="q1" value="a"> a) 2adat</label>
+                <label class="choice"><input type="radio" name="q1" value="b"> b) adat_2</label>
+                <label class="choice"><input type="radio" name="q1" value="c"> c) adat-2</label>
+                <label class="choice"><input type="radio" name="q1" value="d"> d) print</label>
+              </div>
+
+              <!-- 2 -->
+              <label class="question">2. Mi lesz a <code>print(type(3.14))</code> kimenete?</label>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="q2" value="a"> a) &lt;class 'int'&gt;</label>
+                <label class="choice"><input type="radio" name="q2" value="b"> b) &lt;class 'float'&gt;</label>
+                <label class="choice"><input type="radio" name="q2" value="c"> c) &lt;class 'double'&gt;</label>
+                <label class="choice"><input type="radio" name="q2" value="d"> d) &lt;class 'str'&gt;</label>
+              </div>
+
+              <!-- 3 -->
+              <label class="question">3. Melyik operátor végzi az egész osztást?</label>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="q3" value="a"> a) /</label>
+                <label class="choice"><input type="radio" name="q3" value="b"> b) //</label>
+                <label class="choice"><input type="radio" name="q3" value="c"> c) %</label>
+                <label class="choice"><input type="radio" name="q3" value="d"> d) **</label>
+              </div>
+
+              <!-- 4 -->
+              <label class="question">4. Mit ad vissza a <code>len("Python")</code>?</label>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="q4" value="a"> a) 5</label>
+                <label class="choice"><input type="radio" name="q4" value="b"> b) 6</label>
+                <label class="choice"><input type="radio" name="q4" value="c"> c) "Python"</label>
+                <label class="choice"><input type="radio" name="q4" value="d"> d) Hibaüzenet</label>
+              </div>
+
+              <!-- 5 -->
+              <label class="question">5. Melyik állítás igaz?</label>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="q5" value="a"> a) A stringek módosíthatók.</label>
+                <label class="choice"><input type="radio" name="q5" value="b"> b) A listák módosíthatók.</label>
+                <label class="choice"><input type="radio" name="q5" value="c"> c) A tuple elemei szabadon cserélhetők.</label>
+                <label class="choice"><input type="radio" name="q5" value="d"> d) A szótár (dict) nem tartalmazhat kulcs-érték párokat.</label>
+              </div>
+
+              <!-- 6 -->
+              <label class="question">6. Mit ad a <code>3 ** 2</code>?</label>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="q6" value="a"> a) 6</label>
+                <label class="choice"><input type="radio" name="q6" value="b"> b) 9</label>
+                <label class="choice"><input type="radio" name="q6" value="c"> c) 8</label>
+                <label class="choice"><input type="radio" name="q6" value="d"> d) 32</label>
+              </div>
+
+              <!-- 7 -->
+              <label class="question">7. Hogyan írjuk helyesen a logikai értékeket?</label>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="q7" value="a"> a) TRUE, FALSE</label>
+                <label class="choice"><input type="radio" name="q7" value="b"> b) true, false</label>
+                <label class="choice"><input type="radio" name="q7" value="c"> c) True, False</label>
+                <label class="choice"><input type="radio" name="q7" value="d"> d) 1, 0</label>
+              </div>
+
+              <!-- 8 -->
+              <label class="question">8. Mit ad <code>10 % 3</code>?</label>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="q8" value="a"> a) 3</label>
+                <label class="choice"><input type="radio" name="q8" value="b"> b) 1</label>
+                <label class="choice"><input type="radio" name="q8" value="c"> c) 0.333...</label>
+                <label class="choice"><input type="radio" name="q8" value="d"> d) 30</label>
+              </div>
+
+              <!-- 9 -->
+              <label class="question">9. Melyik függvény alakít át egész számmá?</label>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="q9" value="a"> a) str()</label>
+                <label class="choice"><input type="radio" name="q9" value="b"> b) int()</label>
+                <label class="choice"><input type="radio" name="q9" value="c"> c) float()</label>
+                <label class="choice"><input type="radio" name="q9" value="d"> d) chr()</label>
+              </div>
+
+              <!-- 10 -->
+              <label class="question">10. Mi történik, ha lefut ez a kód? <pre style="display:inline">szam = 5\nprint(szam == 5)</pre></label>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="q10" value="a"> a) Kiírja: True</label>
+                <label class="choice"><input type="radio" name="q10" value="b"> b) Kiírja: 5</label>
+                <label class="choice"><input type="radio" name="q10" value="c"> c) Hibaüzenet</label>
+                <label class="choice"><input type="radio" name="q10" value="d"> d) Kiírja: szam</label>
+              </div>
+
+              <!-- 11 -->
+              <label class="question">11. Melyik a helyes <code>if</code> szerkezet?</label>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="q11" value="a"> a) if szam = 5: ...</label>
+                <label class="choice"><input type="radio" name="q11" value="b"> b) if szam == 5: ...</label>
+                <label class="choice"><input type="radio" name="q11" value="c"> c) if szam := 5: ...</label>
+                <label class="choice"><input type="radio" name="q11" value="d"> d) if szam =&gt; 5: ...</label>
+              </div>
+
+              <!-- 12 -->
+              <label class="question">12. Mit ad vissza: <code>"alma" + "fa"</code>?</label>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="q12" value="a"> a) "alma fa"</label>
+                <label class="choice"><input type="radio" name="q12" value="b"> b) "almafa"</label>
+                <label class="choice"><input type="radio" name="q12" value="c"> c) alma+fa</label>
+                <label class="choice"><input type="radio" name="q12" value="d"> d) Hibaüzenet</label>
+              </div>
+
+              <!-- 13 -->
+              <label class="question">13. Hogyan hozunk létre üres listát?</label>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="q13" value="a"> a) lista = ()</label>
+                <label class="choice"><input type="radio" name="q13" value="b"> b) lista = []</label>
+                <label class="choice"><input type="radio" name="q13" value="c"> c) lista = {}</label>
+                <label class="choice"><input type="radio" name="q13" value="d"> d) lista = ""</label>
+              </div>
+
+              <!-- 14 -->
+              <label class="question">14. Mi lesz a következő kód kimenete? <pre style="display:inline">for i in range(3):\n    print(i)</pre></label>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="q14" value="a"> a) 1 2 3</label>
+                <label class="choice"><input type="radio" name="q14" value="b"> b) 0 1 2</label>
+                <label class="choice"><input type="radio" name="q14" value="c"> c) 0 1 2 3</label>
+                <label class="choice"><input type="radio" name="q14" value="d"> d) 3 2 1</label>
+              </div>
+
+              <!-- 15 -->
+              <label class="question">15. Hogyan kell függvényt definiálni?</label>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="q15" value="a"> a) def fuggveny:</label>
+                <label class="choice"><input type="radio" name="q15" value="b"> b) def fuggveny():</label>
+                <label class="choice"><input type="radio" name="q15" value="c"> c) function fuggveny():</label>
+                <label class="choice"><input type="radio" name="q15" value="d"> d) fuggveny def():</label>
+              </div>
+
+              <!-- 16 -->
+              <label class="question">16. Mi a <code>break</code> utasítás szerepe ciklusban?</label>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="q16" value="a"> a) Megszakítja a ciklust.</label>
+                <label class="choice"><input type="radio" name="q16" value="b"> b) Újraindítja a ciklust.</label>
+                <label class="choice"><input type="radio" name="q16" value="c"> c) Egy elemet átugrik.</label>
+                <label class="choice"><input type="radio" name="q16" value="d"> d) Várakoztatja a programot.</label>
+              </div>
+
+              <!-- 17 -->
+              <label class="question">17. Mi a <code>continue</code> utasítás szerepe ciklusban?</label>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="q17" value="a"> a) Megállítja a ciklust.</label>
+                <label class="choice"><input type="radio" name="q17" value="b"> b) A következő iterációra ugrik.</label>
+                <label class="choice"><input type="radio" name="q17" value="c"> c) Visszaállítja a ciklust az elejére.</label>
+                <label class="choice"><input type="radio" name="q17" value="d"> d) Hibát okoz.</label>
+              </div>
+
+              <!-- 18 -->
+              <label class="question">18. Hogyan nyitunk meg fájlt olvasásra?</label>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="q18" value="a"> a) open("adat.txt")</label>
+                <label class="choice"><input type="radio" name="q18" value="b"> b) open("adat.txt", "r")</label>
+                <label class="choice"><input type="radio" name="q18" value="c"> c) file("adat.txt")</label>
+                <label class="choice"><input type="radio" name="q18" value="d"> d) read("adat.txt")</label>
+              </div>
+
+              <!-- 19 -->
+              <label class="question">19. Mit ad vissza a <code>len([])</code>?</label>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="q19" value="a"> a) 1</label>
+                <label class="choice"><input type="radio" name="q19" value="b"> b) 0</label>
+                <label class="choice"><input type="radio" name="q19" value="c"> c) None</label>
+                <label class="choice"><input type="radio" name="q19" value="d"> d) Hibaüzenet</label>
+              </div>
+
+              <!-- 20 -->
+              <label class="question">20. Mit csinál a <code>print("Python"[0])</code>?</label>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="q20" value="a"> a) Kiírja: "P"</label>
+                <label class="choice"><input type="radio" name="q20" value="b"> b) Kiírja: "y"</label>
+                <label class="choice"><input type="radio" name="q20" value="c"> c) Kiírja: "Python"</label>
+                <label class="choice"><input type="radio" name="q20" value="d"> d) Hibaüzenet</label>
+              </div>
+
+              <div class="pager"><div></div><div><button type="button" id="toFill">Tovább a behelyettesítéshez</button></div></div>
+            </section>
+
+            <!-- II. Behelyettesítés / Kódkiegészítés (15) -->
+            <section id="fill-section" class="hidden">
+              <h2>II. Behelyettesítés / Kódkiegészítés <span class="required-star">*</span></h2>
+              <p class="question-meta">Ezeket a válaszokat a tanár kézzel is ellenőrizheti — a rendszer csak összegyűjti a beírt válaszokat.</p>
+
+              <!-- 21..35 inputs (same as before) -->
+              <label class="question">21. Egészítsd ki: <code>for i in range(1, ___):\n    print(i ** 2)</code></label>
+              <input type="text" name="q21" placeholder="Pl.: 6">
+              <label class="question">22. Hiányzó kulcsszó: ...</label><input type="text" name="q22" placeholder="Pl.: elif">
+              <label class="question">23. ...</label><input type="text" name="q23" placeholder="Pl.: def">
+              <label class="question">24. ...</label><input type="text" name="q24" placeholder="Pl.: 0">
+              <label class="question">25. ...</label><input type="text" name="q25" placeholder="Pl.: lower">
+              <label class="question">26. ...</label><input type="text" name="q26" placeholder="Pl.: for">
+              <label class="question">27. ...</label><input type="text" name="q27" placeholder="Pl.: i">
+              <label class="question">28. ...</label><input type="text" name="q28" placeholder="Pl.: int">
+              <label class="question">29. ...</label><input type="text" name="q29" placeholder="Pl.: 'w'">
+              <label class="question">30. ...</label><input type="text" name="q30" placeholder="Pl.: append">
+              <label class="question">31. ...</label><input type="text" name="q31" placeholder="Pl.: while">
+              <label class="question">32. ...</label><input type="text" name="q32" placeholder="Pl.: betu">
+              <label class="question">33. ...</label><input type="text" name="q33" placeholder="Pl.: x">
+              <label class="question">34. ...</label><input type="text" name="q34" placeholder="Pl.: 5">
+              <label class="question">35. ...</label><input type="text" name="q35" placeholder="Pl.: range(1,6)">
+
+              <div class="pager">
+                <button type="button" id="backToMC" class="ghost">Vissza</button>
+                <button type="button" id="toCode">Tovább a kódoláshoz</button>
+              </div>
+            </section>
+
+            <!-- III. Rövid programíró feladatok (10) -->
+            <section id="code-section" class="hidden">
+              <h2>III. Rövid programíró feladatok <span class="required-star">*</span></h2>
+              <p class="question-meta">Ide írhatják a diákok a megoldásokat — ezek automatikusan nem lesznek javítva, a tanár ellenőrzi őket.</p>
+
+              <!-- 36..45 textareas (same as before) -->
+              <label class="question">36. ...</label><textarea name="q36" placeholder="Pl. if szá%2==0: ..."></textarea>
+              <label class="question">37. ...</label><textarea name="q37" placeholder="Pl. sum(range(1,101))"></textarea>
+              <label class="question">38. ...</label><textarea name="q38"></textarea>
+              <label class="question">39. ...</label><textarea name="q39"></textarea>
+              <label class="question">40. ...</label><textarea name="q40"></textarea>
+              <label class="question">41. ...</label><textarea name="q41"></textarea>
+              <label class="question">42. ...</label><textarea name="q42"></textarea>
+              <label class="question">43. ...</label><textarea name="q43"></textarea>
+              <label class="question">44. ...</label><textarea name="q44"></textarea>
+              <label class="question">45. ...</label><textarea name="q45"></textarea>
+
+              <div class="pager">
+                <button type="button" id="backToFill" class="ghost">Vissza</button>
+                <button type="button" id="finishBtn">Befejezés</button>
+              </div>
+            </section>
+
+            <div class="actions">
+              <button type="button" id="gradeBtn">Ellenőrzés (feleletválasztók javítása)</button>
+              <button type="button" id="downloadBtn" class="ghost">Válaszok letöltése (JSON)</button>
+              <button type="reset" class="ghost">Űrlap törlése</button>
+            </div>
+
+            <div id="resultArea"></div>
+          </form>
+          <!-- QUIZ FORM END -->
+        </div>
+
+        <aside class="side">
+          <h3>Mit csinál ez az oldal?</h3>
+          <ul>
+            <li>A 20 feleletválasztós kérdést azonnal javítja a rendszer.</li>
+            <li>A 15 behelyettesítéses és 10 programíró feladatot a tanár kézzel nézi át.</li>
+            <li>A válaszokat JSON-ként le lehet tölteni, hogy könnyen importálható legyen Excelbe vagy a tanári rendszerbe.</li>
+          </ul>
+
+          <details><summary>Rövid telepítési útmutató (ingyenes URL-hez)</summary>
+            <ol>
+              <li>Hozz létre egy új GitHub repository-t. (pl. <code>python-quiz</code>)</li>
+              <li>Helyezd el ezt az <code>index.html</code> fájlt a repo gyökerébe és pushold fel.</li>
+              <li>GitHub Pages: Settings &gt; Pages &gt; Branch: main &gt; / (root) &gt; Save. A site a <code>https://&lt;felhasználónév&gt;.github.io/&lt;repo&gt;</code> címen lesz elérhető.</li>
+            </ol>
+          </details>
+
+          <p class="question-meta" style="margin-top:10px">Használat: Diák kitölt — letölt JSON — tanár feltölt és javít a tanári felületen.</p>
+        </aside>
+      </div>
+
+      <footer><small>Jó kódolást — és ne feledd: a bugok a tanulás barátai. 😉</small></footer>
+    </main>
+  </div>
+
+  <script>
+    // helyes válaszok a feleletválasztósokhoz
+    const correct = {
+      q1:'b',q2:'b',q3:'b',q4:'b',q5:'b',q6:'b',q7:'c',q8:'b',q9:'b',q10:'a',
+      q11:'b',q12:'b',q13:'b',q14:'b',q15:'b',q16:'a',q17:'b',q18:'b',q19:'b',q20:'a'
+    };
+
+    // elemek
+    const landing = document.getElementById('landing');
+    const startBtn = document.getElementById('startBtn');
+    const mcSection = document.getElementById('mc-section');
+    const fillSection = document.getElementById('fill-section');
+    const codeSection = document.getElementById('code-section');
+    const resultArea = document.getElementById('resultArea');
+
+    // teacher elements
+    const teacherSection = document.getElementById('teacher-section');
+    const fileInput = document.getElementById('fileInput');
+    const processFilesBtn = document.getElementById('processFilesBtn');
+    const teacherTableBody = document.querySelector('#teacherTable tbody');
+    const subCountBadge = document.getElementById('subCount');
+    const teacherDetails = document.getElementById('teacherDetails');
+    const tdStudent = document.getElementById('td-student');
+    const tdMeta = document.getElementById('td-meta');
+    const tdAnswers = document.getElementById('td-answers');
+    const manualGrades = document.getElementById('manualGrades');
+    const teacherComment = document.getElementById('teacherComment');
+    const saveManual = document.getElementById('saveManual');
+    const downloadThis = document.getElementById('downloadThis');
+    const exportAllCsv = document.getElementById('exportAllCsv');
+    const exportAllJson = document.getElementById('exportAllJson');
+
+    // state
+    window.submissions = []; // each: {meta, answers, mcCorrect, mcWrong, mcPercent, manual:{scores, total, comment}}
+
+    startBtn.addEventListener('click',()=>{
+      const name = document.getElementById('studentName').value.trim();
+      if(!name){ alert('Kérlek add meg a neved!'); return; }
+
+      // TEACHER CHECK: exact match
+      if(name === 'Tóth Alex GVM'){
+        landing.classList.add('hidden');
+        teacherSection.classList.remove('hidden');
+        mcSection.classList.add('hidden');
+        fillSection.classList.add('hidden');
+        codeSection.classList.add('hidden');
+        window.isTeacher = true;
+        window.studentName = name;
+        window.answers = {};
+        return;
+      }
+
+      // normal student flow
+      landing.classList.add('hidden');
+      mcSection.classList.remove('hidden');
+      window.studentName = name;
+      window.isTeacher = false;
+      window.answers = {};
+    });
+
+    // STUDENT NAVIGATION (same logic as before)
+    document.getElementById('toFill').addEventListener('click', ()=>{
+      for(let i=1;i<=20;i++){
+        const radios = document.getElementsByName('q'+i);
+        if(!Array.from(radios).some(r=>r.checked)){ alert('Kérlek válaszolj minden feleletválasztós kérdésre (1-20).'); return; }
+      }
+      for(let i=1;i<=20;i++){
+        const radios = document.getElementsByName('q'+i);
+        const checked = Array.from(radios).find(r=>r.checked);
+        window.answers['q'+i] = checked ? checked.value : null;
+      }
+      mcSection.classList.add('hidden');
+      fillSection.classList.remove('hidden');
+      window.scrollTo(0,0);
+    });
+
+    document.getElementById('backToMC').addEventListener('click',()=>{ fillSection.classList.add('hidden'); mcSection.classList.remove('hidden'); window.scrollTo(0,0); });
+    document.getElementById('toCode').addEventListener('click',()=>{
+      for(let i=21;i<=35;i++){ const el = document.querySelector('[name="q'+i+'"]'); if(!el || !el.value.trim()){ alert('Kérlek válaszolj minden behelyettesítéses kérdésre (21-35).'); return; } }
+      for(let i=21;i<=35;i++) window.answers['q'+i] = document.querySelector('[name="q'+i+'"]').value.trim();
+      fillSection.classList.add('hidden'); codeSection.classList.remove('hidden'); window.scrollTo(0,0);
+    });
+    document.getElementById('backToFill').addEventListener('click',()=>{ codeSection.classList.add('hidden'); fillSection.classList.remove('hidden'); window.scrollTo(0,0); });
+
+    document.getElementById('finishBtn').addEventListener('click',()=>{
+      for(let i=36;i<=45;i++){ const el = document.querySelector('[name="q'+i+'"]'); if(!el || !el.value.trim()){ alert('Kérlek válaszolj minden programíró feladatra (36-45).'); return; } }
+      for(let i=36;i<=45;i++) window.answers['q'+i] = document.querySelector('[name="q'+i+'"]').value.trim();
+
+      mcScore();
+      resultArea.scrollIntoView({behavior:'smooth'});
+    });
+
+    function mcScore(){
+      let correctCount=0; const wrong=[];
+      for(let i=1;i<=20;i++){
+        const a = window.answers['q'+i];
+        if(a===correct['q'+i]){ correctCount++; } else wrong.push(i);
+      }
+      const percent = Math.round((correctCount/20)*100);
+      resultArea.innerHTML = `<div class="result">Automatikus javítás (feleletválasztók): ${correctCount}/20 (${percent}%)</div>`;
+      if(wrong.length) resultArea.innerHTML += `<div style="margin-top:8px;color:var(--muted)">Hibás kérdések: ${wrong.join(', ')}</div>`;
+      resultArea.innerHTML += `<div style="margin-top:10px;color:var(--muted)">A teljes válaszcsomag letölthető JSON-ként és elküldhető a tanárnak.</div>`;
+    }
+
+    document.getElementById('gradeBtn').addEventListener('click', ()=>{
+      for(let i=1;i<=20;i++){ const radios = document.getElementsByName('q'+i); const checked = Array.from(radios).find(r=>r.checked); window.answers['q'+i] = checked ? checked.value : null; }
+      mcScore();
+    });
+
+    // student JSON download
+    document.getElementById('downloadBtn').addEventListener('click', ()=>{
+      for(let i=1;i<=20;i++){ const radios = document.getElementsByName('q'+i); const checked = Array.from(radios).find(r=>r.checked); window.answers['q'+i] = checked ? checked.value : (window.answers['q'+i] || null); }
+      for(let i=21;i<=35;i++){ const el = document.querySelector('[name="q'+i+'"]'); window.answers['q'+i] = el && el.value ? el.value.trim() : (window.answers['q'+i] || null); }
+      for(let i=36;i<=45;i++){ const el = document.querySelector('[name="q'+i+'"]'); window.answers['q'+i] = el && el.value ? el.value.trim() : (window.answers['q'+i] || null); }
+
+      const payload = { meta:{generated:new Date().toISOString(), quiz:"Python alapok - 45", student: window.studentName || null}, answers: window.answers || {} };
+      const blob = new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href=url; a.download=(window.studentName?window.studentName.replace(/\s+/g,'_'):'student')+"_answers.json"; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    });
+
+    /* ------------------------
+       TEACHER: file processing
+       ------------------------ */
+    processFilesBtn.addEventListener('click', ()=> {
+      const files = fileInput.files;
+      if(!files || files.length===0){ alert('Válassz legalább egy JSON fájlt.'); return; }
+      const readers = [];
+      for(const f of files){
+        readers.push(readFileAsText(f).then(text=>{
+          try{ return JSON.parse(text); } catch(e){ return {__invalid__:true, name:f.name, raw:text}; }
+        }));
+      }
+      Promise.all(readers).then(results=>{
+        let added=0;
+        for(const doc of results){
+          if(doc && doc.__invalid__){ console.warn('Nem érvényes JSON:', doc.name); continue; }
+          // validate structure
+          const meta = doc.meta || {};
+          const answers = doc.answers || {};
+          const student = meta.student || ('(név hiányzik)');
+          const generated = meta.generated || '(dátum hiányzik)';
+          // compute MC
+          let mcCorrect=0; const mcWrong=[];
+          for(let i=1;i<=20;i++){
+            const v = answers['q'+i] || null;
+            if(v === correct['q'+i]) mcCorrect++; else mcWrong.push(i);
+          }
+          const mcPercent = Math.round((mcCorrect/20)*100);
+          // push to submissions
+          window.submissions.push({
+            meta:{student,generated,sourceFile:meta.sourceFile || null},
+            answers,
+            mcCorrect, mcWrong, mcPercent,
+            manual:{scores:{}, total:null, comment:null}
+          });
+          added++;
+        }
+        if(added===0) alert('Nem találtam feldolgozható beküldést a fájlokban. Ellenőrizd a JSON szerkezetét.');
+        else {
+          refreshTeacherTable();
+          alert(added + ' beküldés feldolgozva.');
+        }
+      });
+    });
+
+    function readFileAsText(file){
+      return new Promise((res,rej)=>{
+        const fr = new FileReader();
+        fr.onload = ()=>res(fr.result);
+        fr.onerror = ()=>rej(fr.error);
+        fr.readAsText(file);
+      });
+    }
+
+    function refreshTeacherTable(){
+      teacherTableBody.innerHTML='';
+      window.submissions.forEach((s, idx)=>{
+        const tr = document.createElement('tr');
+        const student = s.meta.student || '(név hiányzik)';
+        const generated = s.meta.generated || '';
+        const mc = `${s.mcCorrect}/20`;
+        const pct = s.mcPercent + '%';
+        const man = s.manual.total !== null ? s.manual.total : '-';
+        const total = computeTotalForDisplay(s);
+        tr.innerHTML = `<td class="mono">${escapeHtml(student)}</td>
+                        <td class="small">${escapeHtml(generated)}</td>
+                        <td>${mc}</td>
+                        <td>${pct}</td>
+                        <td>${man}</td>
+                        <td class="right">${total}</td>
+                        <td><button data-idx="${idx}" class="viewBtn">Megnéz</button></td>`;
+        teacherTableBody.appendChild(tr);
+      });
+      subCountBadge.textContent = window.submissions.length + ' beküldés';
+      // attach view handlers
+      Array.from(document.getElementsByClassName('viewBtn')).forEach(btn=>{
+        btn.addEventListener('click',(e)=>{
+          const idx = +btn.getAttribute('data-idx');
+          openDetails(idx);
+        });
+      });
+    }
+
+    function computeTotalForDisplay(s){
+      // Example: MC 20 pont, manual sum max 100? we choose: MC scaled to 20, manual (36-45) each 0-10 => max 100.
+      const mcPoints = s.mcCorrect; // 0-20
+      const manualTotal = s.manual.total !== null ? s.manual.total : 0;
+      const total = mcPoints + manualTotal; // simple aggregation
+      return total;
+    }
+
+    function openDetails(idx){
+      const s = window.submissions[idx];
+      tdStudent.textContent = s.meta.student;
+      tdMeta.innerHTML = `Beküldés ideje: <span class="mono">${escapeHtml(s.meta.generated || '')}</span> — Forrás fájl: <span class="mono">${escapeHtml(s.meta.sourceFile || '-')}</span>`;
+      // show answers neatly
+      let html = '<strong>Feleletválasztós (1-20):</strong><div class="small">';
+      for(let i=1;i<=20;i++){
+        const a = s.answers['q'+i] || '';
+        const ok = (a === correct['q'+i]);
+        html += `<div>${i}. <span class="${ok? 'correct':'wrong'}">${escapeHtml(a || '-')}</span></div>`;
+      }
+      html += '</div><hr style="opacity:.06"/>';
+      html += '<strong>Behelyettesítés (21-35):</strong><div class="small">';
+      for(let i=21;i<=35;i++){ html += `<div>${i}. ${escapeHtml(s.answers['q'+i] || '')}</div>`; }
+      html += '</div><hr style="opacity:.06"/>';
+      html += '<strong>Kód (36-45):</strong><div class="small">';
+      for(let i=36;i<=45;i++){ html += `<div>${i}. <pre style="white-space:pre-wrap;margin:0">${escapeHtml(s.answers['q'+i] || '')}</pre></div>`; }
+      html += '</div>';
+      tdAnswers.innerHTML = html;
+
+      // manual grades inputs
+      manualGrades.innerHTML = '';
+      for(let i=36;i<=45;i++){
+        const existing = s.manual.scores && (s.manual.scores[i]? s.manual.scores[i] : '');
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = `<label class="small">${i}:</label><input type="number" min="0" max="10" step="1" data-q="${i}" value="${existing}" />`;
+        manualGrades.appendChild(wrapper);
+      }
+      teacherComment.value = s.manual.comment || '';
+      teacherDetails.classList.remove('hidden');
+
+      // save handler
+      saveManual.onclick = ()=> {
+        const inputs = manualGrades.querySelectorAll('input[data-q]');
+        let sum=0; const scores={};
+        inputs.forEach(inp=>{
+          const q = inp.getAttribute('data-q');
+          const v = inp.value.trim();
+          const num = v === '' ? 0 : Math.max(0, Math.min(10, Number(v)));
+          scores[q] = num;
+          sum += num;
+        });
+        s.manual.scores = scores;
+        s.manual.total = sum;
+        s.manual.comment = teacherComment.value.trim() || null;
+        tdSaveMsg('Mentve.');
+        refreshTeacherTable();
+      };
+
+      // download this submission
+      downloadThis.onclick = ()=>{
+        const payload = { meta: s.meta, answers: s.answers, mcCorrect: s.mcCorrect, mcWrong: s.mcWrong, manual: s.manual };
+        const blob = new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href=url; a.download=(s.meta.student? s.meta.student.replace(/\s+/g,'_'):'student')+"_graded.json"; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+      };
+    }
+
+    function tdSaveMsg(text){
+      const el = document.getElementById('td-save-msg');
+      el.textContent = text;
+      setTimeout(()=>el.textContent = '', 3000);
+    }
+
+    function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+
+    // Export aggregated CSV / JSON
+    exportAllJson.addEventListener('click', ()=>{
+      if(window.submissions.length===0){ alert('Nincsenek beküldések.'); return; }
+      const blob = new Blob([JSON.stringify(window.submissions,null,2)],{type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href=url; a.download='all_submissions.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    });
+
+    exportAllCsv.addEventListener('click', ()=>{
+      if(window.submissions.length===0){ alert('Nincsenek beküldések.'); return; }
+      const rows = [];
+      const header = ['student','generated','mcCorrect','mcPercent','manualTotal','total','comment','answers_json'];
+      rows.push(header.join(','));
+      window.submissions.forEach(s=>{
+        const mc = s.mcCorrect;
+        const pct = s.mcPercent;
+        const man = s.manual.total !== null ? s.manual.total : '';
+        const total = computeTotalForDisplay(s);
+    
