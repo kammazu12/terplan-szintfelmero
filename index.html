@@ -346,7 +346,7 @@ print(x)</pre></code>
               <label class="question">25. Mi az egész szám típus neve Pythonban?<label><input type="text" name="q25">
               <label class="question">26. Mi az alábbi érték típusa: <i>"123321"</i>?</label><input type="text" name="q26">
               <label class="question">27. Mi az alábbi érték típusa: <i>123321</i>?</label><input type="text" name="q27" >
-              <label class="question">28. Mi az alábbi érték típusa: <i>"123.321"</i>?</label><input type="text" name="q28">
+              <label class="question">28. Mi az alábbi érték típusa: <i>123.321</i>?</label><input type="text" name="q28">
               <label class="question">29. Mi az alábbi érték típusa: <i>[1, 2, 3, 3, 2, 1]</i>?</label><input type="text" name="q29">
               <label class="question">30. Mi az alábbi érték típusa: <i>-123_321</i>?</label><input type="text" name="q30">
 
@@ -478,12 +478,12 @@ print(x)</pre></code>
         answers['q'+i] = checked ? checked.value : null;
       }
       // fill
-      for(let i=21;i<=35;i++){
+      for(let i=21;i<=30;i++){
         const el = document.querySelector('[name="q'+i+'"]');
         answers['q'+i] = el && el.value ? el.value.trim() : null;
       }
       // code
-      for(let i=36;i<=45;i++){
+      for(let i=31;i<=33;i++){
         const el = document.querySelector('[name="q'+i+'"]');
         answers['q'+i] = el && el.value ? el.value.trim() : null;
       }
